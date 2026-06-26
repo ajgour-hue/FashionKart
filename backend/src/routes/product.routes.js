@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct, getSellerProducts } from "../controller/product.controller.js";
+import { createProduct, getSellerProducts ,getAllProducts} from "../controller/product.controller.js";
 import { Router } from "express";
 import { authenticateSeller } from "../middleware/auth.middleware.js";
 import { createProductValidator } from "../validator/product.validator.js";
@@ -29,3 +29,9 @@ router.post("/", authenticateSeller, upload.array('images', 7), createProductVal
 router.get("/seller", authenticateSeller, getSellerProducts)
 export default router;
 
+
+/**
+ * 
+ */
+
+router.get("/" ,getAllProducts )

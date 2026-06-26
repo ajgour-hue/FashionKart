@@ -3,7 +3,21 @@ import React from 'react'
 const ContinueWithGoogle = () => {
     return (
         <a href="/api/auth/google"
-            className="flex items-center justify-center w-full bg-white border border-[#dadce0] rounded-4xl px-4 py-3 text-sm font-medium text-[#3c4043] hover:bg-[#f8f9fa] hover:shadow-[0_1px_2px_0_rgba(60,64,67,0.3),0_1px_3px_1px_rgba(60,64,67,0.15)] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#4285F4] focus:ring-offset-2 focus:ring-offset-[#131313]"
+            className="flex items-center justify-center w-full bg-white px-4 py-3.5 text-sm font-medium transition-all duration-300 focus:outline-none"
+            style={{
+                color: '#1b1c1a',
+                border: '1px solid #e7e2d9',
+            }}
+            onMouseEnter={e => {
+                e.currentTarget.style.borderColor = '#C9A96E';
+                e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(27,28,26,0.06), 0 1px 3px 1px rgba(27,28,26,0.08)';
+            }}
+            onMouseLeave={e => {
+                e.currentTarget.style.borderColor = '#e7e2d9';
+                e.currentTarget.style.boxShadow = 'none';
+            }}
+            onFocus={e => e.currentTarget.style.boxShadow = '0 0 0 2px #C9A96E'}
+            onBlur={e => e.currentTarget.style.boxShadow = 'none'}
         >
             <svg className="w-5 h-5 mr-3" viewBox="0 0 48 48">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
@@ -12,9 +26,9 @@ const ContinueWithGoogle = () => {
                 <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
                 <path fill="none" d="M0 0h48v48H0z"></path>
             </svg>
-            <span>Continue with Google</span>
+            <span className="text-[11px] uppercase tracking-[0.2em] font-medium">Continue with Google</span>
         </a>
     )
 }
 
-export default ContinueWithGoogle
+export default ContinueWithGoogle;

@@ -87,6 +87,22 @@ export const login = async(req,res) => {
 
 }
 
+export const getMe = async(req,res) => {
+    const user = req.user;
+    return res.status(200).json({
+        message: "User fetched successfully",
+        success: true,
+        user: {
+            id: user._id,
+            email: user.email,
+            contact: user.contact,
+            fullname: user.fullname,
+            role: user.role
+        }
+    })
+}
+
+
 
 export const googleCallback = async(req,res) => {
     
