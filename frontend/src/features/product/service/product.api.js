@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 export const productApiInstance = axios.create({
     // baseURL: "http://localhost:3000/api/products", yaha par hame cors ki jagah proxy use kiya hain
     baseURL: "/api/products",
@@ -28,4 +29,11 @@ export async function getAllProducts(){
 
     return response.data;
 
+}
+
+export async function getProductById(productId){
+
+    const response = await productApiInstance.get(`/detail/${productId}`);
+
+    return response.data;
 }

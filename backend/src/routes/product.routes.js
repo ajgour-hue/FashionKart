@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct, getSellerProducts ,getAllProducts} from "../controller/product.controller.js";
+import { createProduct, getSellerProducts ,getAllProducts ,getProductDetails} from "../controller/product.controller.js";
 import { Router } from "express";
 import { authenticateSeller } from "../middleware/auth.middleware.js";
 import { createProductValidator } from "../validator/product.validator.js";
@@ -31,7 +31,17 @@ export default router;
 
 
 /**
- * 
+ * @route GET /api/products
+ * @description Get all products
+ * @access Public
  */
 
 router.get("/" ,getAllProducts )
+
+
+/**
+ * @route GET /api/products/detail/:id
+ * @description Get product details by ID
+ * @access Public
+ */
+router.get("/detail/:id", getProductDetails)
