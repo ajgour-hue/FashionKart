@@ -7,6 +7,7 @@ import productRouter from "./routes/product.routes.js";
 import passport from "passport";
 import { Strategy as GoogleStrategy} from "passport-google-oauth20"
 import { config } from "./config/config.js";
+import cartRouter from "./routes/cart.routes.js";
 
 const app = express();
 
@@ -20,12 +21,17 @@ app.use(cookierParser());
 //     methods: ["GET", "POST", "PUT", "DELETE"]
 
 // }));    
+
 app.use("/api/v1/auth", authRouter);
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => res.send("server is running"));
+
+// this is for testing the routes
+
 app.use("/api/auth" , authRouter);
 app.use("/api/products" , productRouter);
+app.use("/api/cart", cartRouter);
 
 
 app.use(passport.initialize());

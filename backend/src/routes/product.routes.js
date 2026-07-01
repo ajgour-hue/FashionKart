@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct, getSellerProducts ,getAllProducts ,getProductDetails} from "../controller/product.controller.js";
+import { createProduct, getSellerProducts, getAllProducts, getProductDetails, addProductVariant } from "../controller/product.controller.js";
 import { Router } from "express";
 import { authenticateSeller } from "../middleware/auth.middleware.js";
 import { createProductValidator } from "../validator/product.validator.js";
@@ -36,7 +36,7 @@ export default router;
  * @access Public
  */
 
-router.get("/" ,getAllProducts )
+router.get("/", getAllProducts)
 
 
 /**
@@ -45,3 +45,12 @@ router.get("/" ,getAllProducts )
  * @access Public
  */
 router.get("/detail/:id", getProductDetails)
+
+
+
+/**
+ *  @route post /api/products/:productId/variants
+ * @description Add a new variant to a product
+ * @access Private (Seller only)
+ */
+router.post("/:productId/variants", authenticateSeller, upload.array('images', 7), addProductVariant)

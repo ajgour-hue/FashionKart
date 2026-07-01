@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { config } from "../config/config.js";
 import bcrypt from "bcrypt";
+import priceSchema from "./price.schema.js";
 
 const productSchema = new mongoose.Schema({
     title: {
@@ -12,11 +13,8 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     price: {
-        amount: {
-            type: Number,
-            required: true
-
-        }, 
+        type: priceSchema,
+        required: true
     },
     currency: {
             type: String,
@@ -57,15 +55,7 @@ const productSchema = new mongoose.Schema({
                 of: String
             },
             price: {
-                amount: {
-                    type: Number,
-                    required: true
-                },
-                currency: {
-                    type: String,
-                    enum: [ "USD", "EUR", "GBP", "JPY", "INR" ],
-                    default: "INR"
-                }
+                type: priceSchema
             }
         },
 
