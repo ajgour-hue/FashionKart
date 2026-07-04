@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useProduct } from '../hook/useProduct';
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Plus as PlusIcon, Trash2 as TrashIcon, ArrowLeft } from 'lucide-react';
 
 const SellerProductDetails = () => {
@@ -162,262 +162,395 @@ async function fetchProductDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#fbf9f6] flex items-center justify-center">
-        <p className="text-[#6e6258] italic font-serif">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fbf9f6' }}>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", color: '#7A6E63' }} className="italic text-lg">Loading...</p>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-[#fbf9f6] flex items-center justify-center">
-        <p className="text-[#6e6258] italic font-serif">Product not found.</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#fbf9f6' }}>
+        <p style={{ fontFamily: "'Cormorant Garamond', serif", color: '#7A6E63' }} className="italic text-lg">Product not found.</p>
       </div>
     );
   }
 
   return (
+    <>
+      {/* Google Fonts */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
 
-    <div className="min-h-screen bg-[#fbf9f6] text-[#1b1c1a] font-sans pb-24">
-      {/* Top Banner / Header */}
-      <header className="px-6 md:px-12 py-6 flex items-center justify-between border-b border-[#e9e5dd]">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-[#c9a96e] tracking-[0.2em] text-sm uppercase hover:text-[#745a27] transition-colors cursor-pointer"
-        >
-          <ArrowLeft size={16} />
-          <span className="font-serif">Snitch.</span>
-        </button>
-      </header>
+      <style>{`
+        html { scroll-behavior: smooth; }
+        ::selection { background-color: rgba(201, 169, 110, 0.3); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        .fade-in { animation: fadeIn 1s ease both; }
+        .field-input { transition: border-color 0.3s ease; }
+        .variant-card { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .variant-card:hover { transform: translateY(-4px); }
+        .action-btn { transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+      `}</style>
 
-      <main className="max-w-6xl mx-auto px-6 md:px-12 mt-10">
+      <div
+        className="min-h-screen pb-24"
+        style={{ backgroundColor: '#fbf9f6', color: '#1b1c1a', fontFamily: "'Inter', sans-serif" }}
+      >
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 xl:px-24">
 
-        {/* Base Product Info */}
-        <section className="flex flex-col md:flex-row gap-10 md:gap-16 mb-20">
-          <div className="w-full md:w-1/2">
-            {/* Gallery placeholder */}
-            <div className="w-full aspect-[4/5] bg-[#f5f3f0] overflow-hidden">
-              {product.images && product.images.length > 0 ? (
-                <img src={product.images[ 0 ].url} alt={product.title} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-[#7f7668] italic font-serif">No Image</div>
+          {/* ── Page Header ── */}
+          <div className="pt-6 sm:pt-8 pb-5 sm:pb-6 flex items-end gap-5 overflow-hidden fade-in">
+            <button
+              onClick={() => navigate(-1)}
+              className="text-xl leading-none transition-colors duration-200 mb-1 cursor-pointer"
+              style={{ color: '#B5ADA3' }}
+              aria-label="Go back"
+              onMouseEnter={e => e.currentTarget.style.color = '#C9A96E'}
+              onMouseLeave={e => e.currentTarget.style.color = '#B5ADA3'}
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <div>
+              <span
+                className="text-[10px] uppercase tracking-[0.3em] font-medium mb-2 block"
+                style={{ color: '#C9A96E' }}
+              >
+                Seller Dashboard
+              </span>
+              <h1
+                className="text-3xl lg:text-4xl font-light leading-tight"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+              >
+                Product Details
+              </h1>
+              <div className="mt-2 w-14 h-px" style={{ backgroundColor: '#C9A96E' }} />
+            </div>
+          </div>
+
+          {/* Base Product Info */}
+          <section className="flex flex-col md:flex-row gap-10 md:gap-16 pt-4 pb-16 fade-in-up">
+            <div className="w-full md:w-1/2">
+              {/* Gallery */}
+              <div className="w-full aspect-[3/4] max-w-[420px] mx-auto md:mx-0 overflow-hidden rounded-sm" style={{ backgroundColor: '#f5f3f0' }}>
+                {product.images && product.images.length > 0 ? (
+                  <img src={product.images[ 0 ].url} alt={product.title} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center italic" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#B5ADA3' }}>No Image</div>
+                )}
+              </div>
+              {/* Thumbnails */}
+              {product.images && product.images.length > 1 && (
+                <div className="flex gap-2 mt-3 overflow-x-auto max-w-[420px] mx-auto md:mx-0">
+                  {product.images.slice(1).map((img, i) => (
+                    <img key={i} src={img.url} alt={`Thumb ${i}`} className="w-16 h-20 object-cover rounded-sm shrink-0" style={{ backgroundColor: '#f5f3f0' }} />
+                  ))}
+                </div>
               )}
             </div>
-            {/* Thumbnails */}
-            {product.images && product.images.length > 1 && (
-              <div className="flex gap-2 mt-2 overflow-x-auto">
-                {product.images.slice(1).map((img, i) => (
-                  <img key={i} src={img.url} alt={`Thumb ${i}`} className="w-16 h-20 object-cover bg-[#f5f3f0] shrink-0" />
+
+            <div className="w-full md:w-1/2 flex flex-col justify-center">
+              <span
+                className="text-[10px] uppercase tracking-[0.3em] font-medium mb-3 block"
+                style={{ color: '#C9A96E' }}
+              >
+                Listing
+              </span>
+              <h2
+                className="text-4xl md:text-5xl font-light leading-tight mb-4"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+              >
+                {product.title}
+              </h2>
+              <div className="w-14 h-px mb-6" style={{ backgroundColor: '#C9A96E' }} />
+              <p className="text-base mb-8 leading-relaxed max-w-md" style={{ color: '#7A6E63' }}>{product.description}</p>
+              <div
+                className="text-xl tracking-wide font-light"
+                style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+              >
+                {product.price?.amount} {product.price?.currency}
+              </div>
+            </div>
+          </section>
+
+          {/* Variants & Inventory */}
+          <section className="fade-in-up">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-4">
+              <div>
+                <span
+                  className="text-[10px] uppercase tracking-[0.3em] font-medium mb-2 block"
+                  style={{ color: '#C9A96E' }}
+                >
+                  Inventory
+                </span>
+                <h2
+                  className="text-3xl font-light leading-tight"
+                  style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+                >
+                  Variants
+                </h2>
+                <div className="mt-2 w-14 h-px" style={{ backgroundColor: '#C9A96E' }} />
+              </div>
+              {!isAddingVariant && (
+                <button
+                  onClick={() => setIsAddingVariant(true)}
+                  className="action-btn py-3 px-6 text-[11px] uppercase tracking-[0.3em] font-medium flex items-center gap-2 cursor-pointer shrink-0"
+                  style={{ backgroundColor: '#1b1c1a', color: '#fbf9f6' }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.backgroundColor = '#C9A96E';
+                    e.currentTarget.style.color = '#1b1c1a';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.backgroundColor = '#1b1c1a';
+                    e.currentTarget.style.color = '#fbf9f6';
+                  }}
+                >
+                  <PlusIcon size={14} /> New Variant
+                </button>
+              )}
+            </div>
+
+            {/* Add New Variant Form */}
+            {isAddingVariant && (
+              <div className="p-6 md:p-10 mt-8 mb-14 fade-in-up" style={{ backgroundColor: '#ffffff', border: '1px solid #e9e5dd' }}>
+                <div className="flex justify-between items-center mb-8">
+                  <h3
+                    className="text-2xl font-light"
+                    style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+                  >
+                    Create Variant
+                  </h3>
+                  <button
+                    onClick={() => setIsAddingVariant(false)}
+                    className="text-[10px] uppercase tracking-[0.2em] cursor-pointer transition-colors duration-200"
+                    style={{ color: '#B5ADA3' }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#1b1c1a'}
+                    onMouseLeave={e => e.currentTarget.style.color = '#B5ADA3'}
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  {/* Form Left Col: Attributes & Basics */}
+                  <div className="flex flex-col gap-8">
+
+                    {/* Dynamic Attributes */}
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-medium mb-3" style={{ color: '#C9A96E' }}>
+                        Attributes (e.g. Size, Color) *
+                      </label>
+                      <div className="flex flex-col gap-3">
+                        {attributeInputs.map((attr, index) => (
+                          <div key={index} className="flex gap-2 items-center">
+                            <input
+                              type="text"
+                              placeholder="Key (e.g., Size)"
+                              value={attr.key}
+                              onChange={(e) => handleAttributeChange(index, 'key', e.target.value)}
+                              className="field-input w-1/2 bg-transparent outline-none py-2 font-light"
+                              style={{ borderBottom: '1px solid #d8d2c6', color: '#1b1c1a' }}
+                              onFocus={e => e.currentTarget.style.borderBottom = '1px solid #C9A96E'}
+                              onBlur={e => e.currentTarget.style.borderBottom = '1px solid #d8d2c6'}
+                            />
+                            <input
+                              type="text"
+                              placeholder="Value (e.g., M)"
+                              value={attr.value}
+                              onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
+                              className="field-input w-1/2 bg-transparent outline-none py-2 font-light"
+                              style={{ borderBottom: '1px solid #d8d2c6', color: '#1b1c1a' }}
+                              onFocus={e => e.currentTarget.style.borderBottom = '1px solid #C9A96E'}
+                              onBlur={e => e.currentTarget.style.borderBottom = '1px solid #d8d2c6'}
+                            />
+                            {attributeInputs.length > 1 && (
+                              <button
+                                onClick={() => handleRemoveAttribute(index)}
+                                className="p-2 cursor-pointer transition-colors duration-200"
+                                style={{ color: '#ba1a1a' }}
+                                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#fbeceb'}
+                                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                              >
+                                <TrashIcon size={14} />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <button
+                        onClick={handleAddAttribute}
+                        className="mt-4 text-[10px] uppercase tracking-[0.2em] font-medium flex items-center gap-1 cursor-pointer transition-colors duration-200"
+                        style={{ color: '#C9A96E' }}
+                        onMouseEnter={e => e.currentTarget.style.color = '#a68950'}
+                        onMouseLeave={e => e.currentTarget.style.color = '#C9A96E'}
+                      >
+                        <PlusIcon size={12} /> Add Attribute
+                      </button>
+                    </div>
+
+                    {/* Stock & Price */}
+                    <div className="flex gap-6">
+                      <div className="w-1/2 flex flex-col gap-2">
+                        <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: '#C9A96E' }}>
+                          Initial Stock
+                        </label>
+                        <input
+                          type="number"
+                          value={newVariant.stock}
+                          onChange={(e) => setNewVariant({ ...newVariant, stock: e.target.value })}
+                          className="field-input w-full bg-transparent outline-none py-2 font-light"
+                          style={{ borderBottom: '1px solid #d8d2c6', color: '#1b1c1a' }}
+                          onFocus={e => e.currentTarget.style.borderBottom = '1px solid #C9A96E'}
+                          onBlur={e => e.currentTarget.style.borderBottom = '1px solid #d8d2c6'}
+                        />
+                      </div>
+                      <div className="w-1/2 flex flex-col gap-2">
+                        <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: '#C9A96E' }}>
+                          Price (Optional)
+                        </label>
+                        <input
+                          type="number"
+                          value={newVariant.price.amount}
+                          onChange={(e) => setNewVariant({ ...newVariant, price: { ...newVariant.price, amount: e.target.value } })}
+                          placeholder="Default if empty"
+                          className="field-input w-full bg-transparent outline-none py-2 font-light"
+                          style={{ borderBottom: '1px solid #d8d2c6', color: '#1b1c1a' }}
+                          onFocus={e => e.currentTarget.style.borderBottom = '1px solid #C9A96E'}
+                          onBlur={e => e.currentTarget.style.borderBottom = '1px solid #d8d2c6'}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Form Right Col: Images */}
+                  <div>
+                    <div className="flex justify-between items-end mb-3">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: '#C9A96E' }}>
+                        Images (Max 7, Optional)
+                      </label>
+                      <span className="text-[10px]" style={{ color: '#B5ADA3' }}>{newVariant.images.length}/7</span>
+                    </div>
+
+                    {newVariant.images.length > 0 && (
+                      <div className="grid grid-cols-3 gap-2 mb-4">
+                        {newVariant.images.map((img, index) => (
+                          <div key={index} className="relative aspect-[3/4] overflow-hidden rounded-sm" style={{ backgroundColor: '#f5f3f0' }}>
+                            <img src={img.previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                            <button
+                              onClick={() => handleRemoveImage(index)}
+                              className="absolute top-1 right-1 p-1 cursor-pointer transition-colors duration-200"
+                              style={{ backgroundColor: 'rgba(255,255,255,0.85)', color: '#ba1a1a' }}
+                            >
+                              <TrashIcon size={14} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {newVariant.images.length < 7 && (
+                      <div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          className="block w-full text-sm cursor-pointer"
+                          style={{ color: '#7A6E63' }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-10 flex justify-end">
+                  <button
+                    onClick={handleAddNewVariant}
+                    className="action-btn py-3 px-8 text-[11px] uppercase tracking-[0.3em] font-medium cursor-pointer"
+                    style={{ backgroundColor: '#1b1c1a', color: '#fbf9f6' }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor = '#C9A96E';
+                      e.currentTarget.style.color = '#1b1c1a';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = '#1b1c1a';
+                      e.currentTarget.style.color = '#fbf9f6';
+                    }}
+                  >
+                    Save Variant
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Variants List */}
+            {localVariants.length === 0 ? (
+              <div className="py-16 text-center fade-in">
+                <p className="italic text-lg" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#B5ADA3' }}>
+                  No variants have been created yet.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mt-10 pb-8">
+                {localVariants.map((variant, idx) => (
+                  <div key={idx} className="variant-card flex flex-col fade-in-up" style={{ animationDelay: `${Math.min(idx * 60, 400)}ms` }}>
+                    <div className="w-full aspect-[3/4] overflow-hidden mb-4 rounded-sm" style={{ backgroundColor: '#f5f3f0' }}>
+                      {variant.images && variant.images.length > 0 ? (
+                        <img src={variant.images[ 0 ].url} alt="Variant" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-xs italic" style={{ fontFamily: "'Cormorant Garamond', serif", color: '#B5ADA3' }}>No Image</div>
+                      )}
+                    </div>
+
+                    {/* Attributes */}
+                    <div className="flex flex-wrap gap-x-2 gap-y-1 mb-2">
+                      {Object.entries(variant.attributes || {}).map(([ key, val ], i, arr) => (
+                        <span key={key} className="text-[11px] uppercase tracking-[0.15em]" style={{ color: '#7A6E63' }}>
+                          <span style={{ color: '#B5ADA3' }}>{key}:</span> {val}{i < arr.length - 1 ? ' /' : ''}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div
+                      className="text-base font-light mb-4"
+                      style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+                    >
+                      {variant.price?.amount ? `${variant.price.amount} ${variant.price.currency}` : 'Base Price'}
+                    </div>
+
+                    {/* Stock Management Row */}
+                    <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid #e9e5dd' }}>
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: '#C9A96E' }}>Stock</label>
+                      <input
+                        type="number"
+                        value={variant.stock || 0}
+                        onChange={(e) => handleStockChange(idx, e.target.value)}
+                        className="field-input w-16 bg-transparent outline-none py-1 text-right"
+                        style={{ borderBottom: '1px solid #d8d2c6', fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
+                        onFocus={e => e.currentTarget.style.borderBottom = '1px solid #C9A96E'}
+                        onBlur={e => e.currentTarget.style.borderBottom = '1px solid #d8d2c6'}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             )}
-          </div>
 
-          <div className="w-full md:w-1/2 flex flex-col justify-center">
-            <h1 className="font-serif italic text-4xl md:text-5xl leading-tight mb-3">{product.title}</h1>
-            <div className="w-12 h-px bg-[#c9a96e] mb-6" />
-            <p className="text-[#6e6258] text-base mb-8 leading-relaxed max-w-md">{product.description}</p>
-            <div className="text-xl tracking-wide font-light">
-              {product.price?.amount} {product.price?.currency}
-            </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Variants & Inventory */}
-        <section>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-4">
-            <div>
-              <h2 className="font-serif italic text-3xl">Variants & Inventory</h2>
-              <div className="w-12 h-px bg-[#c9a96e] mt-3" />
-            </div>
-            {!isAddingVariant && (
-              <button
-                onClick={() => setIsAddingVariant(true)}
-                className="bg-[#1b1c1a] text-white px-6 py-3 uppercase tracking-[0.15em] text-xs hover:bg-[#3a3a36] transition-colors flex items-center gap-2 cursor-pointer shrink-0"
-              >
-                <PlusIcon size={14} /> New Variant
-              </button>
-            )}
-          </div>
-
-          {/* Add New Variant Form */}
-          {isAddingVariant && (
-            <div className="bg-white p-6 md:p-10 mt-10 mb-14 border border-[#e9e5dd]">
-              <div className="flex justify-between items-center mb-8">
-                <h3 className="font-serif italic text-2xl">Create Variant</h3>
-                <button
-                  onClick={() => setIsAddingVariant(false)}
-                  className="text-[#7f7668] hover:text-[#1b1c1a] text-xs uppercase tracking-[0.15em] cursor-pointer"
-                >
-                  Cancel
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Form Left Col: Attributes & Basics */}
-                <div className="space-y-8">
-
-                  {/* Dynamic Attributes */}
-                  <div>
-                    <label className="block text-xs uppercase tracking-[0.15em] text-[#a8a094] mb-3">Attributes (e.g. Size, Color) *</label>
-                    <div className="space-y-3">
-                      {attributeInputs.map((attr, index) => (
-                        <div key={index} className="flex gap-2 items-center">
-                          <input
-                            type="text"
-                            placeholder="Key (e.g., Size)"
-                            value={attr.key}
-                            onChange={(e) => handleAttributeChange(index, 'key', e.target.value)}
-                            className="w-1/2 bg-transparent border-b border-[#d0c5b5] py-2 focus:outline-none focus:border-[#c9a96e] placeholder:text-[#d0c5b5] font-light"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Value (e.g., M)"
-                            value={attr.value}
-                            onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
-                            className="w-1/2 bg-transparent border-b border-[#d0c5b5] py-2 focus:outline-none focus:border-[#c9a96e] placeholder:text-[#d0c5b5] font-light"
-                          />
-                          {attributeInputs.length > 1 && (
-                            <button onClick={() => handleRemoveAttribute(index)} className="text-[#ba1a1a] p-2 hover:bg-[#fbeceb] transition-colors cursor-pointer">
-                              <TrashIcon size={14} />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      onClick={handleAddAttribute}
-                      className="mt-4 text-[#745a27] text-xs uppercase tracking-[0.15em] flex items-center gap-1 hover:text-[#5a4312] cursor-pointer"
-                    >
-                      <PlusIcon size={12} /> Add Attribute
-                    </button>
-                  </div>
-
-                  {/* Stock & Price */}
-                  <div className="flex gap-6">
-                    <div className="w-1/2">
-                      <label className="block text-xs uppercase tracking-[0.15em] text-[#a8a094] mb-2">Initial Stock</label>
-                      <input
-                        type="number"
-                        value={newVariant.stock}
-                        onChange={(e) => setNewVariant({ ...newVariant, stock: e.target.value })}
-                        className="w-full bg-transparent border-b border-[#d0c5b5] py-2 focus:outline-none focus:border-[#c9a96e] font-light"
-                      />
-                    </div>
-                    <div className="w-1/2">
-                      <label className="block text-xs uppercase tracking-[0.15em] text-[#a8a094] mb-2">Price (Optional)</label>
-                      <input
-                        type="number"
-                        value={newVariant.price.amount}
-                        onChange={(e) => setNewVariant({ ...newVariant, price: { ...newVariant.price, amount: e.target.value } })}
-                        placeholder="Default if empty"
-                        className="w-full bg-transparent border-b border-[#d0c5b5] py-2 focus:outline-none focus:border-[#c9a96e] placeholder:text-[#d0c5b5] font-light"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Form Right Col: Images */}
-                <div>
-                  <div className="flex justify-between items-end mb-3">
-                    <label className="block text-xs uppercase tracking-[0.15em] text-[#a8a094]">Images (Max 7, Optional)</label>
-                    <span className="text-xs text-[#a8a094]">{newVariant.images.length}/7</span>
-                  </div>
-
-                  {newVariant.images.length > 0 && (
-                    <div className="grid grid-cols-3 gap-2 mb-4">
-                      {newVariant.images.map((img, index) => (
-                        <div key={index} className="relative aspect-[4/5] bg-[#f5f3f0]">
-                          <img src={img.previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                          <button
-                            onClick={() => handleRemoveImage(index)}
-                            className="absolute top-1 right-1 bg-white/80 p-1 text-[#ba1a1a] hover:bg-white transition-colors cursor-pointer"
-                          >
-                            <TrashIcon size={14} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {newVariant.images.length < 7 && (
-                    <div>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageUpload}
-                        className="block w-full text-sm text-[#6e6258]
-                          file:mr-4 file:py-2 file:px-4
-                          file:border-0 file:bg-[#f5f3f0] file:text-[#1b1c1a]
-                          hover:file:bg-[#e9e5dd] file:cursor-pointer file:uppercase file:text-xs file:tracking-[0.15em] file:font-serif
-                          cursor-pointer"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-10 flex justify-end">
-                <button
-                  onClick={handleAddNewVariant}
-                  className="bg-[#1b1c1a] text-white px-8 py-3 uppercase tracking-[0.15em] text-xs hover:bg-[#3a3a36] transition-colors cursor-pointer"
-                >
-                  Save Variant
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Variants List */}
-          {localVariants.length === 0 ? (
-            <div className="py-16 text-center text-[#a8a094] italic font-serif">
-              <p>No variants have been created yet.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 mt-10">
-              {localVariants.map((variant, idx) => (
-                <div key={idx} className="flex flex-col">
-                  <div className="w-full aspect-[4/5] bg-[#f5f3f0] overflow-hidden mb-4">
-                    {variant.images && variant.images.length > 0 ? (
-                      <img src={variant.images[ 0 ].url} alt="Variant" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs text-[#a8a094] italic font-serif">No Image</div>
-                    )}
-                  </div>
-
-                  {/* Attributes */}
-                  <div className="flex flex-wrap gap-x-2 gap-y-1 mb-2">
-                    {Object.entries(variant.attributes || {}).map(([ key, val ], i, arr) => (
-                      <span key={key} className="text-xs uppercase tracking-[0.1em] text-[#6e6258]">
-                        <span className="text-[#a8a094]">{key}:</span> {val}{i < arr.length - 1 ? ' /' : ''}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="text-base font-light mb-4">
-                    {variant.price?.amount ? `${variant.price.amount} ${variant.price.currency}` : 'Base Price'}
-                  </div>
-
-                  {/* Stock Management Row */}
-                  <div className="flex items-center justify-between border-t border-[#e9e5dd] pt-3">
-                    <label className="text-xs text-[#a8a094] uppercase tracking-[0.15em]">Stock</label>
-                    <input
-                      type="number"
-                      value={variant.stock || 0}
-                      onChange={(e) => handleStockChange(idx, e.target.value)}
-                      className="w-16 bg-transparent border-b border-[#d0c5b5] py-1 text-right focus:outline-none focus:border-[#c9a96e] font-serif text-base"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-        </section>
-
-      </main>
-    </div>
+        </div>
+      </div>
+    </>
   )
 }
 

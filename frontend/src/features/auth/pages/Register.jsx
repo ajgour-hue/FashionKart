@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from "../hook/useAuth"
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ContinueWithGoogle from '../component/ContinueWithGoogle';
-
+import toast from "react-hot-toast";
 const Register = () => {
 
     const { handleRegister } = useAuth()
@@ -40,9 +40,11 @@ const Register = () => {
                 isSeller: formData.isSeller,
                 fullname: formData.fullName
             });
+             toast.success("Account created successfully 🎉");
             navigate("/");
         } catch (err) {
             setError(err?.message || 'Something went wrong. Please try again.');
+             toast.error(message);
         } finally {
             setLoading(false);
         }
