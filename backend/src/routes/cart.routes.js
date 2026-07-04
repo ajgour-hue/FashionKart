@@ -1,8 +1,8 @@
 import express from "express";
 import { Router } from "express";                                     
 import {authenticateUser} from "../middleware/auth.middleware.js";
-import {validateAddToCart} from "../validator/cart.validator.js";  
-import {addToCart, getCart} from "../controller/cart.controller.js";
+import {validateAddToCart , validateIncrementItemQuantity} from "../validator/cart.validator.js";  
+import {addToCart, getCart , incrementCartItemQuantity   ,decrementCartItemQuantity , removeCartItem} from "../controller/cart.controller.js";
 
 const router = Router(); 
 
@@ -26,5 +26,13 @@ router.post("/add/:productId/:variantId", authenticateUser, validateAddToCart, a
  * @access Private
  */
 router.get('/', authenticateUser, getCart)
+
+
+router.patch("/quantity/increment/:productId/:variantId", authenticateUser, validateIncrementItemQuantity, incrementCartItemQuantity)
+
+
+router.patch("/quantity/decrement/:productId/:variantId", authenticateUser, validateIncrementItemQuantity, decrementCartItemQuantity)
+
+router.delete("/remove/:productId/:variantId", authenticateUser, validateIncrementItemQuantity, removeCartItem)
 
 export default router;

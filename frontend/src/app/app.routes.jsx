@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import Register from "../features/auth/pages/Register.jsx";
 import Login from "../features/auth/pages/Login.jsx";
 import CreateProduct from "../features/product/pages/CreateProduct.jsx";
@@ -7,12 +7,10 @@ import Protected from "../features/auth/component/Protected.jsx";
 import Home from "../features/product/pages/Home.jsx"
 import ProductDetail from "../features/product/pages/ProductDetail.jsx";
 import SellerProductDetails from "../features/product/pages/SellerProductDetails.jsx";
+import Cart from "../features/cart/pages/Cart.jsx";
+import AppLayout from "./AppLayout.jsx";
 
 export const routes = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />
-  },
   {
     path: "/register",
     element: <Register />
@@ -20,6 +18,22 @@ export const routes = createBrowserRouter([
   {
     path: "/login",
     element: <Login />
+  },
+    
+  {
+    element: <AppLayout />,
+    children: [
+       {
+    path: "/",
+    element: <Home />
+  },
+  {
+    path: "/cart",
+    element: (
+      <Protected>
+        <Cart />
+      </Protected>
+    )
   },
   {
     path: "/product/:productId",
@@ -48,4 +62,6 @@ export const routes = createBrowserRouter([
       <SellerProductDetails />
     </Protected>
   },
+    ]
+  }
 ]) 
