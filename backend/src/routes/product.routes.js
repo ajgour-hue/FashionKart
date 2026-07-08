@@ -1,5 +1,5 @@
 import express from "express";
-import { createProduct, getSellerProducts, getAllProducts, getProductDetails, addProductVariant } from "../controller/product.controller.js";
+import { updateProduct,getSimilarProducts, createProduct, getSellerProducts, getAllProducts, getProductDetails, addProductVariant } from "../controller/product.controller.js";
 import { Router } from "express";
 import { authenticateSeller } from "../middleware/auth.middleware.js";
 import { createProductValidator } from "../validator/product.validator.js";
@@ -54,3 +54,9 @@ router.get("/detail/:id", getProductDetails)
  * @access Private (Seller only)
  */
 router.post("/:productId/variants", authenticateSeller, upload.array('images', 7), addProductVariant)
+
+
+router.get("/:id/similar", getSimilarProducts);
+
+// editing product
+ router.put(  "/:productId",   authenticateSeller,   upload.array("images", 7),   updateProduct);

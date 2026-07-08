@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useCart } from '../hook/useCart'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from "react-hot-toast";
+import {useRazorpay} from "react-razorpay"
 /* ─── Inline styles & tokens matching the "Avenue Montaigne" design system ─── */
 const tokens = {
     surface: '#fbf9f6',
@@ -25,8 +26,16 @@ const Cart = () => {
 
     const shippingFree = cart.totalPrice >= 15000;
 
-    const { handleGetCart, handleRemoveCartItem, handleIncrementCartItem, handleDecrementCartItem, handleAddItem } = useCart()
+    const { handleGetCart, handleRemoveCartItem, handleIncrementCartItem, handleDecrementCartItem, handleAddItem 
+        , handleCreateCartOrder, handleVerifyCartOrder
+    } = useCart()
+
     const navigate = useNavigate()
+
+
+    const { error, isLoading, Razorpay } = useRazorpay();
+    const user = useSelector(state => state.user)
+
 
     const formatCurrency = (amount, currency = "INR") => {
         return `${currency} ${Number(amount).toLocaleString("en-IN")}`;
@@ -57,6 +66,42 @@ const Cart = () => {
         if (variant?.images?.length) return variant.images[0].url
         if (product?.images?.length) return product.images[0].url
         return null
+    }
+
+
+
+    async function handleCheckout() {
+        const order = await handleCreateCartOrder()
+        console.log(order)
+
+
+        const options = {
+            key: "rzp_test_TAxsY1Pp8IufcQ",
+            amount: order.amount, // Amount in paise
+            currency: order.currency,
+            name: "Snitch",
+            description: "Test Transaction",
+            order_id: order.id, // Generate order_id on server
+            handler: async (response) => {
+
+                const isValid = await handleVerifyCartOrder(response)
+
+                if (isValid) {
+                    navigate(`/order-success?order_id=${response?.razorpay_order_id}`)
+                }
+            },
+            prefill: {
+                name: user?.fullname,
+                email: user?.email,
+                contact: user?.contact,
+            },
+            theme: {
+                color: tokens.primary,
+            },
+        };
+
+        const razorpayInstance = new Razorpay(options);
+        razorpayInstance.open();
     }
 
 
@@ -117,7 +162,7 @@ const Cart = () => {
                             Explore the Archive
                         </Link>
                     </div>
-                </div>
+                </div>  
             </>
         )
     }
@@ -589,6 +634,7 @@ const Cart = () => {
                                         e.currentTarget.style.backgroundColor = tokens.onSurface
                                         e.currentTarget.style.color = tokens.surface
                                     }}
+                                   onClick={handleCheckout}
                                 >
                                     Proceed to Checkout
                                 </button>
