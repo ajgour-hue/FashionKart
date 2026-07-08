@@ -3,16 +3,23 @@ import { useSelector } from 'react-redux';
 import { useProduct } from '../hook/useProduct';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Home = () => {
     const products = useSelector(state => state.product.products);
     const user = useSelector(state => state.auth.user);
     const { handleGetAllProducts } = useProduct();
     const navigate = useNavigate();
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
-        handleGetAllProducts();
-    }, []);
+    const timer = setTimeout(() => {
+        handleGetAllProducts(search);
+    }, 400);
+
+    return () => clearTimeout(timer);
+}, [search]);
+
 
     return (
         <>
@@ -130,6 +137,21 @@ const Home = () => {
         Discover our latest curation of premium minimalist pieces,
         meticulously designed for effortless elegance and enduring quality.
     </p>
+
+    <div className="max-w-md w-full mx-auto mb-10">
+    <input
+        type="text"
+        placeholder="Search for products..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full px-5 py-3 rounded-full border text-sm outline-none transition-all"
+        style={{
+            borderColor: "#d0c5b5",
+            backgroundColor: "#fff",
+            color: "#1b1c1a"
+        }}
+    />
+</div>
 
     {/* Stats */}
     <div className="relative flex items-center gap-8 sm:gap-12">

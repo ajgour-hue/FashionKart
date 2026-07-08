@@ -1,5 +1,11 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {
+    useState,
+    useRef,
+    useCallback,
+    useEffect
+} from "react";
+
+import { useNavigate, useParams } from "react-router-dom";
 import { useProduct } from '../hook/useProduct';
 import toast from 'react-hot-toast';
 
@@ -7,7 +13,37 @@ const CURRENCIES = [ 'INR', 'USD', 'EUR', 'GBP' ];
 const MAX_IMAGES = 7;
 
 const CreateProduct = () => {
-    const { handleCreateProduct } = useProduct();
+    const {
+    handleCreateProduct,
+    handleGetProductById,
+    handleUpdateProduct
+} = useProduct();
+
+const { productId } = useParams();
+
+const isEdit = !!productId;
+
+useEffect(() => {
+
+    if (!isEdit) return;
+
+    async function loadProduct() {
+
+        const product = await handleGetProductById(productId);
+
+        setFormData({
+            title: product.title,
+            description: product.description,
+            priceAmount: product.price.amount,
+            priceCurrency: product.price.currency
+        });
+
+    }
+
+    loadProduct();
+
+}, [productId]);
+
     const navigate = useNavigate();
 
     const [ formData, setFormData ] = useState({
@@ -76,11 +112,23 @@ const CreateProduct = () => {
             data.append('priceAmount', formData.priceAmount);
             data.append('priceCurrency', formData.priceCurrency);
             images.forEach(img => data.append('images', img.file));
-            await handleCreateProduct(data);
+            
+            if (isEdit) {
 
-            toast.success("Product created successfully 🎉");
+    await handleUpdateProduct(productId, data);
 
-            navigate('/');
+    toast.success("Product updated successfully 🎉");
+
+} else {
+
+    await handleCreateProduct(data);
+
+    toast.success("Product created successfully 🎉");
+
+}
+
+navigate("/");
+
         } catch (err) {
              toast.error(
             err?.response?.data?.message ||
@@ -158,7 +206,7 @@ const CreateProduct = () => {
                                 className="text-3xl lg:text-4xl font-light leading-tight"
                                 style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
                             >
-                                New Listing
+                              {isEdit ? "Edit Product" : "New Listing"}
                             </h1>
                             <div className="mt-2 w-14 h-px" style={{ backgroundColor: '#C9A96E' }} />
                         </div>
@@ -380,7 +428,11 @@ const CreateProduct = () => {
                                     e.currentTarget.style.color = '#fbf9f6';
                                 }}
                             >
-                                {isSubmitting ? 'Publishing...' : 'Publish Listing'}
+                               {
+    isSubmitting
+        ? (isEdit ? "Updating..." : "Publishing...")
+        : (isEdit ? "Update Product" : "Publish Listing")
+}
                             </button>
                         </div>
                     </form>

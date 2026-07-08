@@ -280,6 +280,27 @@ async function fetchProductDetails() {
               >
                 {product.price?.amount} {product.price?.currency}
               </div>
+
+              <div className="mt-8">
+    <button
+        onClick={() => navigate(`/seller/edit-product/${product._id}`)}
+        className="py-3 px-8 text-[11px] uppercase tracking-[0.3em] font-medium transition-all duration-300"
+        style={{
+            backgroundColor: "#1b1c1a",
+            color: "#fbf9f6"
+        }}
+        onMouseEnter={e => {
+            e.currentTarget.style.backgroundColor = "#C9A96E";
+            e.currentTarget.style.color = "#1b1c1a";
+        }}
+        onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = "#1b1c1a";
+            e.currentTarget.style.color = "#fbf9f6";
+        }}
+    >
+        Edit Product
+    </button>
+</div> 
             </div>
           </section>
 

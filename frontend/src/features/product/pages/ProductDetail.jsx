@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useProduct } from '../hook/useProduct';
 import { useCart } from '../../cart/hook/useCart.js';
-import toast from "react-hot-toast";                 
+import toast from "react-hot-toast";
 const ProductDetail = () => {
 
 
@@ -13,6 +13,24 @@ const ProductDetail = () => {
     const { handleGetProductById } = useProduct();
     const { handleAddItem } = useCart();
     const navigate = useNavigate();
+    const [similarProducts, setSimilarProducts] = useState([]);
+    const {
+        
+        handleGetSimilarProducts
+    } = useProduct();
+    useEffect(() => {
+
+        async function load() {
+
+            const data = await handleGetSimilarProducts(productId);
+
+            setSimilarProducts(data);
+
+        }
+
+        load();
+
+    }, [productId]);
 
     async function fetchProductDetails() {
         try {
@@ -165,12 +183,12 @@ const ProductDetail = () => {
         `}</style>
 
             <div
-                className="h-screen overflow-hidden selection:bg-[#C9A96E]/30 flex flex-col"
+               className="min-h-screen selection:bg-[#C9A96E]/30"
                 style={{ backgroundColor: '#fbf9f6', fontFamily: "'Inter', sans-serif" }}
             >
 
                 {/* ── Main content (fills remaining viewport, no scroll anywhere) ── */}
-                <div className="flex-1 min-h-0 max-w-7xl mx-auto w-full px-5 sm:px-8 lg:px-16 xl:px-24 py-4 sm:py-6 lg:py-8 flex items-center">
+                <div className="max-w-7xl mx-auto w-full px-5 sm:px-8 lg:px-16 xl:px-24 py-8">
                     <div className="w-full h-full max-h-full flex flex-col lg:flex-row gap-6 lg:gap-12 xl:gap-16 items-center lg:items-stretch">
 
                         {/* ── LEFT: Image Gallery ── */}
@@ -335,7 +353,7 @@ const ProductDetail = () => {
                                         }
                                     }}
 
-                                    
+
                                     className="action-btn w-full py-2.5 sm:py-3 text-[11px] uppercase tracking-[0.25em] font-medium transition-all duration-300"
                                     style={{
                                         backgroundColor: '#1b1c1a',
@@ -392,6 +410,50 @@ const ProductDetail = () => {
                         </div>
                     </div>
                 </div>
+
+{/* Similar Products */}
+
+<div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-16 xl:px-24 pb-20">
+
+    <h2
+        className="text-4xl mb-10"
+        style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            color: "#1b1c1a"
+        }}
+    >
+        You May Also Like
+    </h2>
+
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+
+        {similarProducts.map((item) => (
+
+            <div
+                key={item._id}
+                onClick={() => navigate(`/product/${item._id}`)}
+                className="cursor-pointer"
+            >
+                <img
+                    src={item.images[0]?.url}
+                    className="aspect-[4/5] object-cover"
+                />
+
+                <h3 className="mt-4 font-semibold">
+                    {item.title}
+                </h3>
+
+                <p>
+                    ₹ {item.price.amount}
+                </p>
+
+            </div>
+
+        ))}
+
+    </div>
+
+</div>
             </div>
         </>
     );

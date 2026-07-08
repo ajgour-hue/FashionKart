@@ -1,14 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import ProfileMenu from './ProfileMenu'
 
 const Nav = () => {
     const navigate = useNavigate()
     const user = useSelector(state => state.auth.user)
     const cartItems = useSelector(state => state.cart.items)
-
-
-
 
     const handleLogout = () => {
         localStorage.removeItem('token')
@@ -16,40 +14,53 @@ const Nav = () => {
     }
 
     return (
-<nav
-className=" z-50
-w-full
-h-[72px]
-px-10 lg:px-20
-flex items-center justify-between
-bg-[#fbf9f6]/95
-backdrop-blur-lg
-border-b border-[#e8e5e1]
-shadow-sm
-"
->
+        <nav
+            className="
+                z-50 w-full h-[72px]
+                px-6 md:px-10 lg:px-20
+                flex items-center justify-between
+                bg-[#fbf9f6]/95 backdrop-blur-lg
+                border-b border-[#e8e5e1]
+                shadow-sm
+            "
+        >
+            {/* Logo */}
             <Link
                 to="/"
-                className="text-sm font-medium tracking-[0.35em] uppercase hover:opacity-80 transition-opacity"
-                style={{ fontFamily: "'Cormorant Garamond', serif", color: '#C9A96E' }}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-                Snitch.
+                <svg width="22" height="22" viewBox="0 0 100 60" fill="none">
+                    <path d="M50 18 L20 44 L80 44 L50 18 Z" stroke="#C9A96E" strokeWidth="3" strokeLinejoin="round" />
+                    <line x1="20" y1="44" x2="80" y2="44" stroke="#C9A96E" strokeWidth="3" />
+                    <path d="M50 18 C50 12 46 8 40 8" fill="none" stroke="#C9A96E" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+                <span
+                    className="text-lg font-medium tracking-[0.35em]"
+                    style={{ fontFamily: "'Cormorant Garamond', serif", color: '#C9A96E' }}
+                >
+                    FashionKart
+                </span>
             </Link>
 
-            <div
-                className="flex gap-6 items-center text-[10px] uppercase tracking-[0.2em] font-medium"
-                style={{ color: '#7A6E63' }}
-            >
+            
+
+            {/* Right side */}
+            <div className="flex items-center gap-6">
                 {user ? (
                     <>
-                        <span style={{ color: '#1b1c1a' }}>{user.fullname}</span>
+                        {/* Nav links — uppercase/tracked style stays only on these, not on the avatar */}
+                        <div
+                            className="hidden sm:flex items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-medium"
+                            style={{ color: '#7A6E63' }}
+                        >
+                            {user?.role === 'seller' && (
+                                <Link to="/seller/dashboard" className="transition-colors hover:text-[#C9A96E]">
+                                    Seller Dashboard
+                                </Link>
+                            )}
+                        </div>
 
-                        {user?.role === 'seller' && (
-                            <Link to="/seller/dashboard" className="transition-colors hover:text-[#C9A96E]">
-                                Seller Dashboard
-                            </Link>
-                        )}
-
+                        {/* Cart */}
                         {user?.role === 'buyer' && (
                             <Link
                                 to="/cart"
@@ -92,19 +103,21 @@ shadow-sm
                             </Link>
                         )}
 
-                        <button onClick={handleLogout} className="transition-colors hover:text-[#C9A96E]">
-                            Logout
-                        </button>
+                        {/* Avatar + dropdown (name + logout live inside here, no duplicate button) */}
+                        <ProfileMenu user={user} onLogout={handleLogout} />
                     </>
                 ) : (
-                    <>
+                    <div
+                        className="flex items-center gap-6 text-[10px] uppercase tracking-[0.2em] font-medium"
+                        style={{ color: '#7A6E63' }}
+                    >
                         <Link to="/login" className="transition-colors hover:text-[#C9A96E]">
                             Sign In
                         </Link>
                         <Link to="/register" className="transition-colors hover:text-[#C9A96E]">
                             Sign Up
                         </Link>
-                    </>
+                    </div>
                 )}
             </div>
         </nav>

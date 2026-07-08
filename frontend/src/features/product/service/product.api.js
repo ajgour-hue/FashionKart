@@ -23,9 +23,13 @@ export async function getSellerProducts(){
 }
 
 
-export async function getAllProducts(){
+export async function getAllProducts(search = "") {
 
-    const response = await productApiInstance.get("/");
+    const response = await productApiInstance.get("/", {
+        params: {
+            search
+        }
+    });
 
     return response.data;
 
@@ -57,4 +61,23 @@ export async function addProductVariant(productId, newProductVariant) {
 
     return response.data
 
+}
+
+export async function getSimilarProducts(productId) {
+
+    const response = await productApiInstance.get(
+        `/${productId}/similar`
+    );
+
+    return response.data;
+}
+
+export async function updateProduct(productId, formData) {
+
+    const response = await productApiInstance.put(
+        `/${productId}`,
+        formData
+    );
+
+    return response.data;
 }
