@@ -52,13 +52,34 @@ export async function getSellerProducts(req, res) {
 
 export async function getAllProducts(req, res) {
 
-    const products = await productModel.find();
+    const { search = "" } = req.query;
+
+    let filter = {};
+
+    if (search.trim()) {
+        filter.$or = [
+            {
+                title: {
+                    $regex: search,
+                    $options: "i"
+                }
+            },
+            {
+                description: {
+                    $regex: search,
+                    $options: "i"
+                }
+            }
+        ];
+    }
+
+    const products = await productModel.find(filter);
 
     res.status(200).json({
         message: "Products fetched successfully",
         success: true,
         products
-    })
+    });
 
 }
 
@@ -130,5 +151,92 @@ export async function addProductVariant(req, res) {
         success: true,
         product
     })
+}
+
+
+export async function getSimilarProducts(req, res) {
+
+    const { id } = req.params;
+
+    const product = await productModel.findById(id);
+
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: "Product not found"
+        });
     }
 
+    const products = await productModel.find({
+        _id: { $ne: id }, // current product ko hata do
+        title: {
+            $regex: product.title.split(" ")[0],
+            $options: "i"
+        }
+    }).limit(4);
+
+    res.json({
+        success: true,
+        products
+    });
+
+}
+
+export async function updateProduct(req, res) {
+    try {
+        const { productId } = req.params;
+        const { title, description, priceAmount, priceCurrency } = req.body;
+
+        const product = await productModel.findOne({
+            _id: productId,
+            seller: req.user._id
+        });
+
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            });
+        }
+
+        // Update basic details
+        product.title = title;
+        product.description = description;
+
+        product.price = {
+            amount: Number(priceAmount),
+            currency: priceCurrency || "INR"
+        };
+
+        // Update images only if new images are uploaded
+        if (req.files && req.files.length > 0) {
+
+            const images = await Promise.all(
+                req.files.map(async (file) => {
+                    return await uploadFile({
+                        buffer: file.buffer,
+                        fileName: file.originalname
+                    });
+                })
+            );
+
+            product.images = images;
+        }
+
+        await product.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Product updated successfully",
+            product
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error"
+        });
+    }
+}

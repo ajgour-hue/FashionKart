@@ -1,110 +1,116 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import ProfileMenu from './ProfileMenu'
 
 const Nav = () => {
     const navigate = useNavigate()
     const user = useSelector(state => state.auth.user)
     const cartItems = useSelector(state => state.cart.items)
-
-
-
-
+    const wishlist = useSelector((state) => state.wishlist.items);
     const handleLogout = () => {
         localStorage.removeItem('token')
         navigate('/login')
     }
 
     return (
-<nav
-className=" z-50
-w-full
-h-[72px]
-px-10 lg:px-20
-flex items-center justify-between
-bg-[#fbf9f6]/95
-backdrop-blur-lg
-border-b border-[#e8e5e1]
-shadow-sm
-"
->
+        <nav
+            className="
+                sticky top-0 z-50 w-full h-[72px]
+                px-6 md:px-10 lg:px-20
+                flex items-center justify-between
+                bg-white/80 backdrop-blur-xl
+                border-b border-neutral-200/70
+            "
+        >
+            {/* Logo */}
             <Link
                 to="/"
-                className="text-sm font-medium tracking-[0.35em] uppercase hover:opacity-80 transition-opacity"
-                style={{ fontFamily: "'Cormorant Garamond', serif", color: '#C9A96E' }}
+                className="flex items-center gap-2.5 group"
             >
-                Snitch.
+                <svg width="24" height="24" viewBox="0 0 100 60" fill="none" className="transition-transform duration-300 group-hover:-translate-y-0.5">
+                    <path d="M50 18 L20 44 L80 44 L50 18 Z" stroke="#000000" strokeWidth="3" strokeLinejoin="round" />
+                    <line x1="20" y1="44" x2="80" y2="44" stroke="#000000" strokeWidth="3" />
+                    <path d="M50 18 C50 12 46 8 40 8" fill="none" stroke="#000000" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+                <span className="text-lg font-semibold tracking-[0.2em] transition-opacity duration-300 group-hover:opacity-70">
+                    FashionKart
+                </span>
             </Link>
 
-            <div
-                className="flex gap-6 items-center text-[10px] uppercase tracking-[0.2em] font-medium"
-                style={{ color: '#7A6E63' }}
-            >
+            {/* Right side */}
+            <div className="flex items-center gap-5 sm:gap-7">
                 {user ? (
                     <>
-                        <span style={{ color: '#1b1c1a' }}>{user.fullname}</span>
-
-                        {user?.role === 'seller' && (
-                            <Link to="/seller/dashboard" className="transition-colors hover:text-[#C9A96E]">
-                                Seller Dashboard
-                            </Link>
-                        )}
-
-                        {user?.role === 'buyer' && (
-                            <Link
-                                to="/cart"
-                                className="relative flex items-center hover:opacity-70 transition-opacity"
-                                style={{ color: '#1b1c1a' }}
-                                aria-label="Shopping cart"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
+                        {/* Nav links */}
+                        <div className="hidden sm:flex items-center gap-7 uppercase tracking-[2px] text-xs font-medium text-neutral-500">
+                            {user?.role === 'seller' && (
+                                <Link
+                                    to="/seller/dashboard"
+                                    className="relative hover:text-black transition-colors after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-px after:bg-black after:transition-all after:duration-300 hover:after:w-full"
                                 >
-                                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                                    <line x1="3" y1="6" x2="21" y2="6" />
-                                    <path d="M16 10a4 4 0 0 1-8 0" />
-                                </svg>
+                                    Seller Dashboard
+                                </Link>
+                            )}
+                        </div>
 
-                                {cartItems.length > 0 && (
-                                    <span
-                                        className="absolute -top-2 -right-2 flex items-center justify-center rounded-full text-white"
-                                        style={{
-                                            backgroundColor: '#C9A96E',
-                                            width: '16px',
-                                            height: '16px',
-                                            fontSize: '9px',
-                                            fontFamily: "'Inter', sans-serif",
-                                            fontWeight: 600,
-                                            letterSpacing: 0,
-                                        }}
-                                    >
-                                        {cartItems.length > 9 ? '9+' : cartItems.length}
+                        <div className="flex items-center gap-4 sm:gap-5">
+                            {/* Cart */}
+                            {user?.role === 'buyer' && (
+                                <Link
+                                    to="/cart"
+                                    className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-neutral-100 transition-colors"
+                                    aria-label="Shopping cart"
+                                >
+                                    <i className="ri-shopping-bag-line text-xl"></i>
+
+                                    {cartItems.length > 0 && (
+                                        <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-black text-white text-[10px] font-medium flex items-center justify-center leading-none">
+                                            {cartItems.length > 9 ? '9+' : cartItems.length}
+                                        </span>
+                                    )}
+                                </Link>
+                            )}
+
+                            {/* Wishlist */}
+                            {user?.role === 'buyer' && (
+                                   <Link
+                                to="/wishlist"
+                                className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-neutral-100 transition-colors"
+                                aria-label="Wishlist"
+                            >
+                                <i className="ri-heart-line text-xl"></i>
+
+                                {wishlist.length > 0 && (
+                                    <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[10px] font-medium flex items-center justify-center leading-none">
+                                        {wishlist.length > 9 ? '9+' : wishlist.length}
                                     </span>
                                 )}
                             </Link>
-                        )}
+                            )}
+                        </div>
 
-                        <button onClick={handleLogout} className="transition-colors hover:text-[#C9A96E]">
-                            Logout
-                        </button>
+                        {/* Divider */}
+                        <div className="hidden sm:block w-px h-6 bg-neutral-200" />
+
+                        {/* Avatar + dropdown (name + logout live inside here, no duplicate button) */}
+                        <ProfileMenu user={user} onLogout={handleLogout} />
                     </>
                 ) : (
-                    <>
-                        <Link to="/login" className="transition-colors hover:text-[#C9A96E]">
+                    <div className="flex items-center gap-3 uppercase tracking-[2px] text-xs font-medium">
+                        <Link
+                            to="/login"
+                            className="text-neutral-500 hover:text-black transition-colors px-4 py-2"
+                        >
                             Sign In
                         </Link>
-                        <Link to="/register" className="transition-colors hover:text-[#C9A96E]">
+                        <Link
+                            to="/register"
+                            className="bg-black text-white px-5 py-2.5 rounded-full hover:bg-neutral-800 transition-colors"
+                        >
                             Sign Up
                         </Link>
-                    </>
+                    </div>
                 )}
             </div>
         </nav>

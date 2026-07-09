@@ -9,6 +9,9 @@ import ProductDetail from "../features/product/pages/ProductDetail.jsx";
 import SellerProductDetails from "../features/product/pages/SellerProductDetails.jsx";
 import Cart from "../features/cart/pages/Cart.jsx";
 import AppLayout from "./AppLayout.jsx";
+import OrderSuccess from "../features/cart/pages/OrderSuccess.jsx";
+import OrderStatus from "../features/cart/pages/OrderStatus.jsx";
+import Wishlist from "../features/product/pages/Wishlist.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -19,49 +22,74 @@ export const routes = createBrowserRouter([
     path: "/login",
     element: <Login />
   },
-    
+
   {
     element: <AppLayout />,
     children: [
-       {
-    path: "/",
-    element: <Home />
-  },
-  {
-    path: "/cart",
-    element: (
-      <Protected>
-        <Cart />
-      </Protected>
-    )
-  },
-  {
-    path: "/product/:productId",
-    element: <ProductDetail />
-  },
-  {
-    path: "/seller/dashboard",
-    element: (
-      <Protected role="seller">
-        <Dashboard />
-      </Protected>
-    ),
-  },
-  {
-    path: "/seller/create-product",
-    element: (
-      <Protected role="seller">
-        <CreateProduct />
-      </Protected>
-    ),
-  },
+      {
+        path: "/",
+        element: <Home />
+      },
+      {
+        path: "/cart",
+        element: (
+          <Protected>
+            <Cart />
+          </Protected>
+        )
+      },
+      {
+        path: "/wishlist",
+        element: (
+          <Protected>
+            <Wishlist />
+          </Protected>
+        ),
+      },
+      {
+        path: "/order-success",
+        element: <OrderSuccess />
+      },
+      {
+        path: "/product/:productId",
+        element: <ProductDetail />
+      },
+      {
+        path: "/seller/dashboard",
+        element: (
+          <Protected role="seller">
+            <Dashboard />
+          </Protected>
+        ),
+      },
+      {
+        path: "/seller/create-product",
+        element: (
+          <Protected role="seller">
+            <CreateProduct />
+          </Protected>
+        ),
+      },
 
-  {
-    path: "/seller/product/:productId",
-    element: <Protected role="seller" >
-      <SellerProductDetails />
-    </Protected>
-  },
+      {
+        path: "/seller/edit-product/:productId",
+        element: (
+          <Protected role="seller">
+            <CreateProduct />
+          </Protected>
+        ),
+      },
+
+      {
+        path: "/seller/product/:productId",
+        element: <Protected role="seller" >
+          <SellerProductDetails />
+        </Protected>
+      },
     ]
+  },
+  {
+    path: "/order-status/:orderId",
+    element: <OrderStatus />
   }
 ]) 

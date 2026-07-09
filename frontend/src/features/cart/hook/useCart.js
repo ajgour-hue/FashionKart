@@ -2,12 +2,14 @@ import { addItem } from "../service/cart.api.js";
 import { useDispatch } from "react-redux";
 import { addItem as addItemToCart, incrementCartItem, decrementCartItem, removeCartItem, setCart } from "../state/cart.slice.js";
 import { useNavigate } from "react-router-dom";
-import { getCart, incrementItemQuantity, decrementItemQuantity, removeItem } from "../service/cart.api.js";
+import { getCart, incrementItemQuantity, decrementItemQuantity, removeItem  , createCartOrder, verifyCartOrder} from "../service/cart.api.js";
+
 
 
 export const useCart = () => {
 
     const dispatch = useDispatch()
+
 
     async function handleAddItem({ productId, variantId }) {
         const data = await addItem({ productId, variantId })
@@ -40,7 +42,22 @@ export const useCart = () => {
          await handleGetCart();
     }
 
-    return { handleAddItem, handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem }
+      async function handleCreateCartOrder() {
+        const data = await createCartOrder()
+        return data.order
+    }
+
+    async function handleVerifyCartOrder({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
+     
+        const data = await verifyCartOrder({ razorpay_order_id, razorpay_payment_id, razorpay_signature })
+    //  removal of cart items after successful payment order
+        if (data.success) {
+        await handleGetCart();
+    }
+        return data.success
+    }
+
+    return { handleAddItem, handleGetCart, handleIncrementCartItem, handleDecrementCartItem, handleRemoveCartItem , handleCreateCartOrder, handleVerifyCartOrder, handleRemoveCartItem }
 
 }
 

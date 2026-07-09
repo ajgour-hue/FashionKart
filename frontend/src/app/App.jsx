@@ -2,6 +2,7 @@ import React from 'react'
 import {RouterProvider} from "react-router-dom";
 import {routes} from "./app.routes.jsx";
 import './App.css';
+import "remixicon/fonts/remixicon.css";
 import { useSelector } from 'react-redux';
 import { useAuth } from '../features/auth/hook/useAuth';
 import { useEffect } from 'react';

@@ -12,9 +12,35 @@
 
 
 
+        // if (loading) {
+        //     return <div>Loading...</div>
+        // }
+
         if (loading) {
-            return <div>Loading...</div>
-        }
+    return (
+        <div
+            className="min-h-screen flex flex-col items-center justify-center gap-4"
+            style={{ backgroundColor: '#fbf9f6' }}
+        >
+            <div className="relative w-14 h-14">
+                <div
+                    className="absolute inset-0 rounded-full border-2"
+                    style={{ borderColor: '#e8e5e1' }}
+                />
+                <div
+                    className="absolute inset-0 rounded-full border-2 border-t-transparent animate-spin"
+                    style={{ borderColor: '#C9A96E', borderTopColor: 'transparent' }}
+                />
+            </div>
+            <p
+                className="text-xs uppercase tracking-[0.3em]"
+                style={{ color: '#7A6E63', fontFamily: "'Inter', sans-serif" }}
+            >
+                Loading
+            </p>
+        </div>
+    )
+}
 
                 if (!user) {
                     return <Navigate to="/login" />
