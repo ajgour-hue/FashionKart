@@ -1,6 +1,5 @@
-# Velix
-
-Velix is a full-stack e-commerce marketplace where users register as either a **buyer** or a **seller** to interact with a shared product catalog. Sellers can list products (with images and variants) through a dedicated dashboard, while buyers can browse products and manage a shopping cart.
+#FashionKart
+FashionKart is a full-stack e-commerce marketplace where users register as either a **buyer** or a **seller** to interact with a shared product catalog. Sellers can list products (with images and variants) through a dedicated dashboard, while buyers can browse products and manage a shopping cart.
 
 The project is split into two decoupled apps:
 
