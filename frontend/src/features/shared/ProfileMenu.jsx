@@ -15,44 +15,39 @@ const ProfileMenu = ({ user, onLogout }) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Fullname se initials nikalna (e.g. "Rohan Sharma" -> "RS")
-    const initials = user?.fullname
-        ?.split(" ")
-        .map((n) => n[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase();
-
     return (
         <div className="relative" ref={menuRef}>
             <button
                 onClick={() => setOpen(!open)}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium transition-opacity hover:opacity-80"
-                style={{ backgroundColor: "#C9A96E", color: "#1b1c1a" }}
+                className="w-9 h-9 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition"
             >
-                {initials}
+                <i className="ri-user-3-line text-lg text-neutral-600"></i>
             </button>
 
             {open && (
-                <div
-                    className="absolute right-0 mt-2 w-44 py-2 z-50"
-                    style={{
-                        backgroundColor: "#fbf9f6",
-                        border: "1px solid #d0c5b5",
-                        borderRadius: "4px",
-                    }}
-                >
-                    <div
-                        className="px-4 py-2 text-sm border-b"
-                        style={{ color: "#1b1c1a", borderColor: "#d0c5b5" }}
-                    >
-                        {user?.fullname}
+                <div className="absolute right-0 mt-2 w-56 py-2 rounded-xl bg-white border border-neutral-200 shadow-lg z-50">
+
+                    <div className="px-4 py-3 border-b border-neutral-100">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center shrink-0">
+                                <i className="ri-user-3-line text-lg text-neutral-500"></i>
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-sm font-medium text-neutral-900 truncate">
+                                    {user?.fullname}
+                                </p>
+                                <p className="text-xs text-neutral-500 truncate">
+                                    {user?.email}
+                                </p>
+                            </div>
+                        </div>
                     </div>
+
                     <button
                         onClick={onLogout}
-                        className="w-full text-left px-4 py-2 text-sm hover:opacity-80 transition-opacity"
-                        style={{ color: "#7A6E63" }}
+                        className="w-full flex items-center gap-2 text-left px-4 py-2.5 mt-1 text-sm text-neutral-600 hover:bg-neutral-50 hover:text-black transition"
                     >
+                        <i className="ri-logout-box-r-line text-base"></i>
                         Logout
                     </button>
                 </div>
