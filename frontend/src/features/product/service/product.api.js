@@ -2,8 +2,8 @@ import axios from "axios";
 
 
 export const productApiInstance = axios.create({
-    // baseURL: "http://localhost:3000/api/products", yaha par hame cors ki jagah proxy use kiya hain
-    baseURL: "/api/products",
+     baseURL: "http://localhost:3000/api/products", // yaha par hame cors ki jagah proxy use kiya hain
+  //  baseURL: "/api/products",
     withCredentials: true,
 })
 
