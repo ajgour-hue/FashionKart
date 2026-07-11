@@ -2,8 +2,8 @@ import axios from "axios";
 
 
 export const wishlistApiInstance = axios.create({
-    // baseURL: "http://localhost:3000/api/products", yaha par hame cors ki jagah proxy use kiya hain
-    baseURL: "/api/wishlist",
+     baseURL: "http://localhost:3000/api/products",  // yaha par hame cors ki jagah proxy use kiya hain
+    // baseURL: "/api/wishlist",
     withCredentials: true,
 })
 
