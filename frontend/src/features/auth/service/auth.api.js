@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const authApiInstance = axios.create({
-     baseURL: "http://localhost:3000/api/auth", //yaha par hame cors ki jagah proxy use kiya hain
+     baseURL: `${import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"}/api/auth`, //yaha par hame cors ki jagah proxy use kiya hain
   //  baseURL: "/api/auth",
     withCredentials: true,
 });

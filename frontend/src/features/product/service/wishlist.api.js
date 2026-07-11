@@ -2,13 +2,13 @@ import axios from "axios";
 
 
 export const wishlistApiInstance = axios.create({
-     baseURL: "http://localhost:3000/api/products",  // yaha par hame cors ki jagah proxy use kiya hain
-    // baseURL: "/api/wishlist",
-    withCredentials: true,
-})
+  baseURL: `${import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
+    }/api/products`,
+  withCredentials: true,
+});
 
 export async function addToWishlist(productId) {
-     const response = await wishlistApiInstance.post(`/${productId}`);
+  const response = await wishlistApiInstance.post(`/${productId}`);
   return response.data;
 }
 
