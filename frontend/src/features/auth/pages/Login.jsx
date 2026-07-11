@@ -100,10 +100,10 @@ const Login = () => {
               FashionKart
             </span>
 
-            
+            <a
               href="/register"
               className="text-xs uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors"
-            <a>
+            >
               Sign Up
             </a>
           </div>
