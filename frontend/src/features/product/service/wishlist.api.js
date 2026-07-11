@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const wishlistApiInstance = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
-    }/api/products`,
+    }/api/wishlist`,
   withCredentials: true,
 });
 

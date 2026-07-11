@@ -2,7 +2,8 @@ import React from 'react'
 
 const ContinueWithGoogle = () => {
     return (
-        <a href="/api/auth/google"
+        <a 
+            href={`${import.meta.env.VITE_BACKEND_URL}/api/auth/google`}
             className="flex items-center justify-center w-full bg-white px-4 py-3.5 text-sm font-medium transition-all duration-300 focus:outline-none"
             style={{
                 color: '#1b1c1a',
