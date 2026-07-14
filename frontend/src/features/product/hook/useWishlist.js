@@ -68,5 +68,5 @@ export const useWishlist = () => {
     handleGetWishlist,
     handleAddToWishlist,
     handleRemoveFromWishlist,
-  };
+  };  
 };

@@ -31,11 +31,11 @@ const Home = () => {
         return () => clearTimeout(timer);
     }, [search]);
 
-    const { handleGetWishlist } = useWishlist();
+        const { handleGetWishlist } = useWishlist();
 
-    useEffect(() => {
-        handleGetWishlist();
-    }, []);
+        useEffect(() => {
+            handleGetWishlist();
+        }, []);
 
 
 
@@ -163,7 +163,7 @@ const Home = () => {
                                                     toast.success("Added to wishlist");
                                                 }
                                             }}
-                                            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                                            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center opacity-90 transition cursor-pointer"
                                         >
                                             {isWishlisted ? (
                                                 <i className="ri-heart-fill text-red-500"></i>

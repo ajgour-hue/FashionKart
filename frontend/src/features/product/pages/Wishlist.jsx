@@ -16,6 +16,7 @@ const Wishlist = () => {
     handleGetWishlist();
   }, []);
 
+  
   if (wishlist.length === 0) {
     return (
       <div className="min-h-[80vh] flex flex-col justify-center items-center text-center px-6">
