@@ -138,7 +138,8 @@ res.cookie("token", token, {
 });
 
      // console.log(req.user);
-    res.redirect("http://localhost:5173");
+    // res.redirect("http://localhost:5173");
+res.redirect("https://fashion-kart-sigma.vercel.app");
 
     // res.redirect(config.FRONTEND_URL);
 
