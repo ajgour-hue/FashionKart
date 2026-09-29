@@ -44,13 +44,12 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL:
+        "https://fashionkart-7ycl.onrender.com/api/auth/google/callback",
     },
-   
     async (accessToken, refreshToken, profile, done) => {
-       return done(null, profile);
+      return done(null, profile);
     }
-
   )
 );
 
