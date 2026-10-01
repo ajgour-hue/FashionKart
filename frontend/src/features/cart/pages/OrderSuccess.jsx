@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getPayment } from "../service/cart.api.js";
-
 const OrderSuccess = () => {
 
     const location = useLocation()
@@ -142,4 +141,4 @@ const OrderSuccess = () => {
     )
 }
 
-export default OrderSuccess
+export default OrderSuccess;
